@@ -24,27 +24,33 @@ async function run() {
         await client.connect();
         const carCollection = client.db('Car-Store').collection('cars');
 
-        app.get('/cars', async (req, res) => {
+        app.get('/car', async (req, res) => {
             const query = {};
             const cursor = carCollection.find(query);
-            const services = await cursor.toArray();
-            res.send(services);
+            const cars = await cursor.toArray();
+            res.send(cars);
 
         })
 
-        app.get('/cars/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await carCollection.findOne(query);
-            res.send(result);
-        });
+        app.post('/car', async (req, res) => {
+            const newCar = req.body;
+            console.log('adding new car')
+            const result = await carCollection.insertOne(newCar);
+            res.send(result)
+        })
+        // app.get('/cars/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await carCollection.findOne(query);
+        //     res.send(result);
+        // });
 
-        app.delete('/cars/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await carCollection.deleteOne(query);
-            res.send(result);
-        });
+        // app.delete('/cars/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const result = await carCollection.deleteOne(query);
+        //     res.send(result);
+        // });
     }
 
     finally {
