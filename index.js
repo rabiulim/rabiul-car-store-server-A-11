@@ -44,6 +44,13 @@ async function run() {
             const result = await carCollection.findOne(query);
             res.send(result);
         });
+        app.get('/productsbyuser', async (req, res) => {
+            const userEmail = req.query.email;
+            const query = { email: userEmail };
+            const cursor = carCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+        })
 
         app.delete('/car/:id', async (req, res) => {
             const id = req.params.id;
